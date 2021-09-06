@@ -1,1 +1,1 @@
-# EducationProject
+# java-run-personal-project
