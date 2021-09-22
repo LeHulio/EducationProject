@@ -1,38 +1,37 @@
 package lehulio;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class Post {
-    private String postName;
-    private int postLikes;
-    private final String postDate;
+    private String name;
+    private int likes;
+    private final Date publicationDate;
 
-    public Post(String postName) {
-        this.postName = postName;
-        this.postLikes = 0;
-        this.postDate = getPostDate();
+    public Post(String name) {
+        this.name = name;
+        this.likes = 0;
+        this.publicationDate = new Date();
     }
 
-    public String getPostName() {
-        return postName;
+    public String getName() {
+        return this.name;
     }
 
-    public void setPostName(String postName) {
-        this.postName = postName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getPostLikes() {
-        return postLikes;
+    public int getLikes() {
+        return this.likes;
     }
 
-    public void setPostLikes(int postLikes) {
-        this.postLikes = postLikes;
+    public void setLikes() {
+        this.likes += 1;
     }
 
-    public String getPostDate() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    public Date getPublicationDate() {
+        return this.publicationDate;
     }
-
 
 }
