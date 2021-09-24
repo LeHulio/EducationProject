@@ -23,7 +23,7 @@ public class PostsAndSearchHandler implements HttpHandler {
             response = GSON.toJson(PostsList.getPostsList());
         } else {
             Map<String, String> requestParameters = getParsedParameters(exchange.getRequestURI().getRawQuery());
-            List<Post> foundPosts = SearchEngine.searchPosts(requestParameters);
+            List<Post> foundPosts = SearchEngine.searchByName(requestParameters);
             response = GSON.toJson(foundPosts);
 
         }

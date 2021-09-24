@@ -7,11 +7,6 @@ import java.util.stream.Collectors;
 
 public class SearchEngine {
 
-    public static List<Post> searchPosts(Map<String, String> queryParameters) {
-
-        return searchByName(queryParameters);
-    }
-
     public static List<Post> searchByName(Map<String, String> queryParameters) {
         if (!queryParameters.containsKey("name")) {
             return Collections.emptyList();
