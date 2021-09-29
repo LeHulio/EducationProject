@@ -19,7 +19,7 @@ public class ApplicationTest {
 
     @Before
     public void runServer() throws IOException {
-        randomPort = (int) (Math.random() * 65536);
+        randomPort = (int) ((Math.random() * (49151 - 1024)) + 1024);
         testServer = HttpServer.create(new InetSocketAddress(randomPort), 0);
         testServer.createContext("/articles", new PostsAndSearchHandler());
         testServer.setExecutor(null);
