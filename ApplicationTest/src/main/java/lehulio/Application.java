@@ -5,9 +5,6 @@ import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.rmi.ServerError;
 import java.util.logging.Logger;
 
 public class Application {
