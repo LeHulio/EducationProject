@@ -21,13 +21,19 @@ public class Application {
                 port = Integer.parseInt(args[0]);
                 if (port > 0) {
                     server = HttpServer.create(new InetSocketAddress(port), 0);
+                } else {
+                    System.out.println("Enter valid port number");
+                    throw new RuntimeException();
                 }
+
             } catch (NumberFormatException e) {
                 e.printStackTrace();
+                System.out.println("Enter valid port number");
+                throw new RuntimeException();
             }
+
         }
         server.createContext("/articles", new PostsAndSearchHandler());
-        server.setExecutor(null);
         server.start();
     }
 

@@ -19,5 +19,13 @@
     <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.4.10" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:13.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.8" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.javacrumbs.json-unit:json-unit-assertj:2.28.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.javacrumbs.json-unit:json-unit-core:2.28.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.javacrumbs.json-unit:json-unit-json-path:2.28.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.jayway.jsonpath:json-path:2.4.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.minidev:json-smart:2.3" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.minidev:accessors-smart:1.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.ow2.asm:asm:5.0.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.assertj:assertj-core:3.21.0" level="project" />
   </component>
 </module>

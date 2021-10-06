@@ -1,17 +1,20 @@
 package lehulio;
 
 import com.sun.net.httpserver.HttpServer;
-import okhttp3.*;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.Random;
+import java.util.Collections;
+import java.util.List;
 
-import static org.junit.Assert.*;
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 
 public class ApplicationTest {
     int randomPort;
@@ -22,21 +25,13 @@ public class ApplicationTest {
         randomPort = (int) ((Math.random() * (49151 - 1024)) + 1024);
         testServer = HttpServer.create(new InetSocketAddress(randomPort), 0);
         testServer.createContext("/articles", new PostsAndSearchHandler());
-        testServer.setExecutor(null);
         testServer.start();
     }
-
 
 
     @Test
     public void shouldReturnFullPostsList() throws IOException {
         OkHttpClient client = new OkHttpClient();
-        /*String url = new HttpUrl.Builder()
-                .scheme("http")
-                .host("localhost:" + randomPort)
-                .addPathSegment("articles")
-                .build()
-                .toString();*/
         String url = HttpUrl
                 .parse("http://localhost:" + randomPort + "/articles")
                 .newBuilder()
@@ -48,14 +43,15 @@ public class ApplicationTest {
         Response response = client.newCall(request).execute();
         String responseBody = response.body().string();
 
-        String exceptedResponse =
-                "\\[\n  \\{\n    \"name\": \"first\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }," +
-                "\n  \\{\n    \"name\": \"second\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }," +
-                "\n  \\{\n    \"name\": \"third\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }\n]";
+//        String exceptedResponse =
+//                "\\[\n  \\{\n    \"name\": \"first\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }," +
+//                "\n  \\{\n    \"name\": \"second\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }," +
+//                "\n  \\{\n    \"name\": \"third\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }\n]";
+        List<Post> exceptedResponse = PostsList.getPostsList();
         System.out.println(responseBody);
         System.out.println(exceptedResponse);
 
-        Assert.assertTrue(responseBody.matches(exceptedResponse));
+        assertThatJson(responseBody).isEqualTo(exceptedResponse);
 
     }
 
@@ -74,18 +70,18 @@ public class ApplicationTest {
         Response response = client.newCall(request).execute();
         String responseBody = response.body().string();
 
-        String exceptedResponse =
-                "\\[\n  \\{\n    \"name\": \"first\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }\n]";
+//        String exceptedResponse =
+//                "\\[\n  \\{\n    \"name\": \"first\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }\n]";
+        List<Post> exceptedResponse = Collections.singletonList(PostsList.getPostsList().get(0));
         System.out.println(responseBody);
         System.out.println(exceptedResponse);
 
-        Assert.assertTrue(responseBody.matches(exceptedResponse));
-
+        assertThatJson(responseBody).isEqualTo(exceptedResponse);
     }
 
 
     @After
-    public void serverDown() {
+    public void tearDown() {
         testServer.stop(0);
     }
 }
