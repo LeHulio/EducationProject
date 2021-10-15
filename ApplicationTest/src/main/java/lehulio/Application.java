@@ -27,16 +27,14 @@ public class Application {
         if (port.length() > 0) {
             try {
                 parsedPort = Integer.parseInt(port);
-                if (parsedPort > 0) {
+                if (parsedPort > 0 && parsedPort <= 65535) {
                     server = HttpServer.create(new InetSocketAddress(parsedPort), 0);
                 } else {
-                    System.out.println("Enter valid port number");
-                    throw new RuntimeException();
+                    throw new RuntimeException("Invalid port: enter between 0 and 65535");
                 }
 
             } catch (NumberFormatException | IOException e) {
-                System.out.println("Enter valid port number");
-                throw new RuntimeException(e);
+                throw new RuntimeException("Enter valid port number");
             }
 
         }
