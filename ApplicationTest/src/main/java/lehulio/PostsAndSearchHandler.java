@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static lehulio.Application.postRepository;
+
 public class PostsAndSearchHandler implements HttpHandler {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
@@ -20,7 +22,7 @@ public class PostsAndSearchHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         String response;
         if (exchange.getRequestURI().getRawQuery() == null) {
-            response = GSON.toJson(PostsList.getPostsList());
+            response = GSON.toJson(postRepository.getPostsList());
         } else {
             Map<String, String> requestParameters = getParsedParameters(exchange.getRequestURI().getRawQuery());
             List<Post> foundPosts = SearchEngine.searchByName(requestParameters);

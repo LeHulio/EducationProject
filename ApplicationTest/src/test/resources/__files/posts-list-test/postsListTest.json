@@ -1,0 +1,17 @@
+[
+  {
+    "name": "first",
+    "likes": 0,
+    "publicationDate": "Oct 13, 2021, 1:21:15 PM"
+  },
+  {
+    "name": "second",
+    "likes": 0,
+    "publicationDate": "Oct 13, 2021, 1:21:15 PM"
+  },
+  {
+    "name": "third",
+    "likes": 0,
+    "publicationDate": "Oct 13, 2021, 1:21:15 PM"
+  }
+]

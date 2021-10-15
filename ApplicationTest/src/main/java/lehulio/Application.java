@@ -10,31 +10,46 @@ import java.util.logging.Logger;
 public class Application {
 
     private static final Logger logger = Logger.getLogger(Application.class.getName());
+    public static PostRepository postRepository = new PostsList();
+    private HttpServer server;
+
 
     public static void main(String... args) throws IOException {
         logger.info("main method start");
+        String port = args[0];
+        new Application().startServer(port);
 
-        HttpServer server = null;
-        int port;
-        if (args[0].length() > 0) {
+
+    }
+
+    public void startServer(String port) {
+        int parsedPort;
+        if (port.length() > 0) {
             try {
-                port = Integer.parseInt(args[0]);
-                if (port > 0) {
-                    server = HttpServer.create(new InetSocketAddress(port), 0);
+                parsedPort = Integer.parseInt(port);
+                if (parsedPort > 0) {
+                    server = HttpServer.create(new InetSocketAddress(parsedPort), 0);
                 } else {
                     System.out.println("Enter valid port number");
                     throw new RuntimeException();
                 }
 
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
+            } catch (NumberFormatException | IOException e) {
                 System.out.println("Enter valid port number");
-                throw new RuntimeException();
+                throw new RuntimeException(e);
             }
 
         }
-        server.createContext("/articles", new PostsAndSearchHandler());
-        server.start();
+        if (server != null) {
+            server.createContext("/articles", new PostsAndSearchHandler());
+            server.start();
+        }
+
+    }
+
+    public void stopServer(int delay) {
+        server.stop(delay);
+
     }
 
 

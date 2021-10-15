@@ -1,6 +1,5 @@
 package lehulio;
 
-import com.sun.net.httpserver.HttpServer;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -10,27 +9,33 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.Collections;
 import java.util.List;
 
+import static lehulio.Application.postRepository;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 
 public class ApplicationTest {
     int randomPort;
-    HttpServer testServer;
+    Application sutServer;
+    PostListForTesting postListForTesting;
 
     @Before
-    public void runServer() throws IOException {
+    public void setUp() throws IOException {
+        postListForTesting = new PostListForTesting();
+        postRepository = postListForTesting;
+
+        sutServer = new Application();
         randomPort = (int) ((Math.random() * (49151 - 1024)) + 1024);
-        testServer = HttpServer.create(new InetSocketAddress(randomPort), 0);
-        testServer.createContext("/articles", new PostsAndSearchHandler());
-        testServer.start();
+        sutServer.startServer("" + randomPort);
     }
 
 
     @Test
     public void shouldReturnFullPostsList() throws IOException {
+        postListForTesting.add(new Post("Endless"));
+        postListForTesting.add(new Post("Space"));
+        postListForTesting.add(new Post("Near"));
         OkHttpClient client = new OkHttpClient();
         String url = HttpUrl
                 .parse("http://localhost:" + randomPort + "/articles")
@@ -42,16 +47,12 @@ public class ApplicationTest {
                 .build();
         Response response = client.newCall(request).execute();
         String responseBody = response.body().string();
-
-//        String exceptedResponse =
-//                "\\[\n  \\{\n    \"name\": \"first\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }," +
-//                "\n  \\{\n    \"name\": \"second\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }," +
-//                "\n  \\{\n    \"name\": \"third\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }\n]";
-        List<Post> exceptedResponse = PostsList.getPostsList();
+        List<Post> expectedResponse = postRepository.getPostsList();
         System.out.println(responseBody);
-        System.out.println(exceptedResponse);
+        System.out.println(expectedResponse);
 
-        assertThatJson(responseBody).isEqualTo(exceptedResponse);
+        assertThatJson(responseBody).isEqualTo(expectedResponse);
+
 
     }
 
@@ -61,7 +62,7 @@ public class ApplicationTest {
         String url = HttpUrl
                 .parse("http://localhost:" + randomPort + "/articles")
                 .newBuilder()
-                .addQueryParameter("name", "first")
+                .addQueryParameter("name", "Endless")
                 .build()
                 .toString();
         Request request = new Request.Builder()
@@ -69,19 +70,16 @@ public class ApplicationTest {
                 .build();
         Response response = client.newCall(request).execute();
         String responseBody = response.body().string();
-
-//        String exceptedResponse =
-//                "\\[\n  \\{\n    \"name\": \"first\",\n    \"likes\": 0,\n    \"publicationDate\": \".*\"\n  }\n]";
-        List<Post> exceptedResponse = Collections.singletonList(PostsList.getPostsList().get(0));
+        List<Post> expectedResponse = Collections.singletonList(postRepository.getPostsList().get(0));
         System.out.println(responseBody);
-        System.out.println(exceptedResponse);
+        System.out.println(expectedResponse);
 
-        assertThatJson(responseBody).isEqualTo(exceptedResponse);
+        assertThatJson(responseBody).isEqualTo(expectedResponse);
     }
 
 
     @After
     public void tearDown() {
-        testServer.stop(0);
+        sutServer.stopServer(0);
     }
 }

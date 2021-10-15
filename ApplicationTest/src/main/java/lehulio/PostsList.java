@@ -3,7 +3,7 @@ package lehulio;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostsList {
+public class PostsList implements PostRepository {
     private static final List<Post> postsList = new ArrayList<>();
 
     static {
@@ -12,7 +12,8 @@ public class PostsList {
         postsList.add(new Post("third"));
     }
 
-    public static List<Post> getPostsList() {
+    @Override
+    public List<Post> getPostsList() {
         return postsList;
     }
 }

@@ -25,7 +25,7 @@ public class Post {
         return this.likes;
     }
 
-    public void setLikes() {
+    public void addLikes() {
         this.likes += 1;
     }
 
